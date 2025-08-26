@@ -8,16 +8,11 @@ import { Link, Route, Routes, useLocation} from "react-router-dom";
 export default function App() {
   const[value, setValue] = useState('');
   const location = useLocation();
-  
-  
- 
 
-  
-  
   return (
     <>
-      <Link to='/Startseite'>
-        <button style={{background: location.pathname == '/Startseite' ? "orange": 'white'}}>
+      <Link to='/'>
+        <button style={{background: location.pathname == '/' ? "orange": 'white'}}>
           Startseite 
         </button>
       </Link>
@@ -29,7 +24,7 @@ export default function App() {
      
      
      <Routes>
-       <Route path="/Startseite" element={<Startseite/>}/>
+       <Route path="/" element={<Startseite/>}/>
        <Route path="/ToDoListe" element={<ToDoListe value={value} setValue={setValue}/>}/>
      </Routes>
     </>
@@ -54,16 +49,16 @@ function ToDoListe({value, setValue}) {
 
     }
   };
+
   useEffect(()=> {
-   localStorage.setItem("todos", JSON.stringify(todos));
    const savedTodos = JSON.parse(localStorage.getItem("todos"));
    setToDos(savedTodos);
-   
-  },[todos])
+  },[])
   return (
    <>
     <input type="text" onChange={(e) => setValue(e.target.value)}/>
     <button onClick={AddToDo}> Hinzufügen </button>
+    {value}
     <ul>
       {todos.map((todo, index) => (
       <li key={index}>
@@ -71,7 +66,8 @@ function ToDoListe({value, setValue}) {
         <button onClick={() => {
           const updatedTodos = todos.filter((_, i) => i != index);
           setToDos(updatedTodos);
-         
+          localStorage.setItem("todos", JSON.stringify(todos));
+          
 
         }}>Löschen</button>
      </li>
