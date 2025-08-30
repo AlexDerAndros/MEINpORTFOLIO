@@ -63,9 +63,9 @@ export default function App() {
 
 function Startseite() {
    return (
-    <>
+    <div className="text-green-500">
       Willkommen!
-    </>
+    </div>
    );
 }
 
@@ -88,7 +88,7 @@ function ToDoListe({value, setValue}) {
   return (
    <>
     <input type="text" onChange={(e) => setValue(e.target.value)}/>
-    <button onClick={AddToDo}> 
+    <button onClick={AddToDo} > 
       {language == "Deutsch" ? (
         <span>
           Hinzufügen
