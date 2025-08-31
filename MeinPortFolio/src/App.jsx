@@ -63,9 +63,14 @@ export default function App() {
 
 function Startseite() {
    return (
-    <div className="text-green-500">
-      Willkommen!
-    </div>
+    <>
+     <div className="text-red-500  bg-yellow-400  p-4 w-1/2 h-32 flex justify-center items-center">
+       Willkommen!
+     </div>
+     <div className="bg-red-600  text-yellow-500  my-6 h-70 w-30 text-xl font-normal font-mono border-2 border-red-200 rounded-lg ">
+       Mein Portfolio
+     </div>
+    </>
    );
 }
 
@@ -99,7 +104,7 @@ function ToDoListe({value, setValue}) {
        </span>
       )} 
     </button>
-    <ul>
+    <ul className="list-none">
       {todos.map((todo, index) => (
       <li key={index}>
         {todo}{" "}
