@@ -6,16 +6,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss({
-      theme: {
-        extend: {
-          fontFamily: {
-            roboto: ["Roboto", "sans-serif"],
-            arial: ["Arial", "sans-serif"],
-            poppins: ["Poppins", "sans-serif"],
-          },
-        },
-      },
-    }),
+    tailwindcss(),
   ],
 })

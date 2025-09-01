@@ -30,18 +30,43 @@ export default function App() {
 
   return (
     <>
-      <Link to='/'>
-        <button style={{background: location.pathname == '/' ? "orange": 'white'}}>
+    {/* Tablet */}
+     <div className="md:flex flex-row items-center justify-between  w-full h-12 px-10 bg-black sm:hidden ">
+       <div className="text-white w-1/3 flex justify-center text-lg">
+         Mein Portfolio
+       </div>
+       <Link to='/'>
+        <button style={{color: location.pathname == '/' ? "orange": 'white'}}>
           Startseite 
         </button>
-      </Link>
-      <Link to='/ToDoListe'>
-        <button style={{background: location.pathname == '/ToDoListe' ? "orange": 'white'}}>
+       </Link>
+       <Link to='/ToDoListe'>
+        <button style={{color: location.pathname == '/ToDoListe' ? "orange": 'white'}}>
           To Do Liste
         </button>
-      </Link>
-     <div onClick={pressIsGerman}>
-      {language == "Deutsch" ? (
+       </Link>
+    </div> 
+ 
+      {/*Handy */}
+     <div className="flex  items-center justify-center  w-full h-12 lg:hidden bg-black text-white">
+          Mein Portfolio
+      </div>  
+      <div className="w-full h-12 fixed bottom-0 flex items-center justify-between px-10 bg-black md:hidden">
+        <Link to='/'>
+         <button style={{color: location.pathname == '/' ? "orange": 'white'}}>
+          Startseite 
+         </button>
+       </Link>
+       <Link to='/ToDoListe'>
+         <button style={{color: location.pathname == '/ToDoListe' ? "orange": 'white'}}>
+           To Do Liste
+         </button>
+         </Link>
+      </div>
+
+      {/* Übersetzer */}
+      <div onClick={pressIsGerman}>
+       {language == "Deutsch" ? (
         <span>
           Sprache:
         </span>
@@ -63,14 +88,14 @@ export default function App() {
 
 function Startseite() {
    return (
-    <>
-     <div className="text-red-500  bg-yellow-400  p-4 w-1/2 h-32 flex justify-center items-center">
-       Willkommen!
-     </div>
-     <div className="bg-red-600  text-yellow-500  my-6 h-70 w-30 text-xl font-normal font-mono border-2 border-red-200 rounded-lg ">
-       Mein Portfolio
-     </div>
-    </>
+    <div className="w-full flex sm:flex-col md:flex-row items-center justify-between flex-wrap">
+       <div className="">
+         Hallo
+       </div>
+       <div className="">
+         Mein Portfolio
+       </div>
+    </ div>
    );
 }
 
