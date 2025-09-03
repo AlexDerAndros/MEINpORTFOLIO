@@ -31,7 +31,7 @@ export default function App() {
   return (
     <>
     {/* Tablet */}
-     <div className="md:flex flex-row items-center justify-between  w-full h-12 px-10 bg-black sm:hidden ">
+     <div className=" hidden md:flex flex-row items-center justify-between  w-full h-12 px-10 bg-black  ">
        <div className="text-white w-1/3 flex justify-center text-lg">
          Mein Portfolio
        </div>
@@ -48,7 +48,7 @@ export default function App() {
     </div> 
  
       {/*Handy */}
-     <div className="flex  items-center justify-center  w-full h-12 lg:hidden bg-black text-white">
+     <div className="flex  items-center justify-center  w-full h-12 md:hidden  bg-black text-white">
           Mein Portfolio
       </div>  
       <div className="w-full h-12 fixed bottom-0 flex items-center justify-between px-10 bg-black md:hidden">
@@ -87,15 +87,16 @@ export default function App() {
 }
 
 function Startseite() {
+  const clas = "w-1/2 h-30 bg-red-500 flex items-center justify-center";
+  const infos = [1,2,3,4,5,6,7,8,9,10]
    return (
-    <div className="w-full flex sm:flex-col md:flex-row items-center justify-between flex-wrap">
-       <div className="">
-         Hallo
-       </div>
-       <div className="">
-         Mein Portfolio
-       </div>
-    </ div>
+    <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 place-items-center my-60">
+       {infos.map((info, index) => (
+        <div className={clas} key={index}>
+          Box {info}
+        </div>
+       ))}
+    </div>
    );
 }
 
