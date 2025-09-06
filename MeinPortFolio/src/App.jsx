@@ -1,8 +1,8 @@
 /*Imports */
-import { useEffect, useState, createContext, useContext} from "react"
+import { useEffect, useState, createContext, useContext, useRef} from "react"
 import "./App.css";
 import { Link, Route, Routes, useLocation} from "react-router-dom";
-
+import {gsap} from 'gsap';
 /*Contexts */
 const LanguageContext = createContext();
 
@@ -87,10 +87,17 @@ export default function App() {
 }
 
 function Startseite() {
+  const refBox = useRef(null);
   const clas = "w-1/2 h-30 bg-red-500 flex items-center justify-center";
   const infos = [1,2,3,4,5,6,7,8,9,10]
+  const animationBox = () => {
+    gsap.fromTo(refBox.current, {x:-200, opacity: 0}, {x:0, opacity: 1, ease:"power3.inOut", duration:1.5});
+  }
+  useEffect(() => {
+    animationBox();
+  }, []);
    return (
-    <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 place-items-center my-60">
+    <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 place-items-center mt-10 mb-20" ref={refBox}>
        {infos.map((info, index) => (
         <div className={clas} key={index}>
           Box {info}
