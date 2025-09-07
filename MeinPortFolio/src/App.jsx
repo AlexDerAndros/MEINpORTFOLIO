@@ -91,7 +91,7 @@ function Startseite() {
   const clas = "w-1/2 h-30 bg-red-500 flex items-center justify-center";
   const infos = [1,2,3,4,5,6,7,8,9,10]
   const animationBox = () => {
-    gsap.fromTo(refBox.current, {x:-200, opacity: 0}, {x:0, opacity: 1, ease:"power3.inOut", duration:1.5});
+    gsap.fromTo(refBox.current, {x:-200, opacity: 0, scale:0.5}, {x:0, opacity: 1, scale:1, ease:"power3.inOut", duration:2});
   }
   useEffect(() => {
     animationBox();
@@ -110,6 +110,7 @@ function Startseite() {
 
 function ToDoListe({value, setValue}) {
   const {language} = useContext(LanguageContext);
+  const toDoRef = useRef(null);
   const[todos, setToDos] = useState([]);
   const AddToDo = () => {
     if(value.trim() != '') {
@@ -118,15 +119,30 @@ function ToDoListe({value, setValue}) {
 
     }
   };
-  
   useEffect(()=> {
    const savedTodos = JSON.parse(localStorage.getItem("todos"));
    setToDos(savedTodos);
+   gsap.fromTo(toDoRef.current, {x: -200, opacity:0, scale:0.8}, {x:0, opacity:1, scale: 1, duration:1.5, ease:"power3.inOut"});
   },[])
   return (
-   <>
-    <input type="text" onChange={(e) => setValue(e.target.value)}/>
-    <button onClick={AddToDo} > 
+   <div ref={toDoRef} className="flex items-center justify-start flex-col w-full gap-8 md:gap-12 ">
+    <div className="font-bold text-3xl md:text-5xl">
+      {language == "Deutsch" ? (
+        <span>
+          TO DO LISTE
+        </span>
+      ):(
+       <span>
+         TO-DO LIST
+       </span>
+      )} 
+    </div>
+     <div>
+     <input type="text" 
+           onChange={(e) => setValue(e.target.value)} 
+           placeholder="Add new task" 
+           className="border-1 border-gray-300 p-1.5 text-lg rounded-l-lg w-3/4 h-12"/>
+     <button onClick={AddToDo} className="w-1/4 h-12 bg-blue-500 text-white rounded-r-lg" > 
       {language == "Deutsch" ? (
         <span>
           Hinzufügen
@@ -136,7 +152,8 @@ function ToDoListe({value, setValue}) {
          Add
        </span>
       )} 
-    </button>
+     </button>
+     </div> 
     <ul className="list-none">
       {todos.map((todo, index) => (
       <li key={index}>
@@ -152,6 +169,6 @@ function ToDoListe({value, setValue}) {
    ))}
 
     </ul>
-   </> 
+   </div> 
   );
 }
