@@ -91,7 +91,7 @@ export default function App() {
 
 function Startseite() {
   const refBox = useRef(null);
-  const clas = "w-1/2 h-30 bg-red-500 flex items-center justify-center";
+  const clas = "w-1/2 h-30 bg-mainColor flex items-center justify-center";
   const infos = [1,2,3,4,5,6,7,8,9,10]
   const animationBox = () => {
     gsap.fromTo(refBox.current, {x:-200, opacity: 0, scale:0.5}, {x:0, opacity: 1, scale:1, ease:"power3.inOut", duration:2});
@@ -144,7 +144,7 @@ function ToDoListe({value, setValue}) {
      <input type="text" 
            onChange={(e) => setValue(e.target.value)} 
            placeholder="Add new task" 
-           className="border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12"/>
+           className="border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12 placeholder: text-mainColor"/>
      <button onClick={AddToDo} className="w-1/4 h-12 bg-blue-500 text-white rounded-r-lg font-text" > 
       {language == "Deutsch" ? (
         <span>

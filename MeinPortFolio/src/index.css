@@ -5,6 +5,7 @@
 @theme {
   --font-head: Poppins, sans-serif;
   --font-text: Inter, sans-serif; 
+  --color-mainColor: #9D8540 ;
 }
  body {
   /* display: flex;
