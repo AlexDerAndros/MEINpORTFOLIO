@@ -3,6 +3,9 @@ import { useEffect, useState, createContext, useContext, useRef} from "react"
 import "./App.css";
 import { Link, Route, Routes, useLocation} from "react-router-dom";
 import {gsap} from 'gsap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+
 /*Contexts */
 const LanguageContext = createContext();
 
@@ -126,7 +129,7 @@ function ToDoListe({value, setValue}) {
   },[])
   return (
    <div ref={toDoRef} className="flex items-center justify-start flex-col w-full gap-8 md:gap-12 ">
-    <div className="font-bold text-3xl md:text-5xl">
+    <div className="font-bold font-head text-3xl md:text-5xl">
       {language == "Deutsch" ? (
         <span>
           TO DO LISTE
@@ -141,8 +144,8 @@ function ToDoListe({value, setValue}) {
      <input type="text" 
            onChange={(e) => setValue(e.target.value)} 
            placeholder="Add new task" 
-           className="border-1 border-gray-300 p-1.5 text-lg rounded-l-lg w-3/4 h-12"/>
-     <button onClick={AddToDo} className="w-1/4 h-12 bg-blue-500 text-white rounded-r-lg" > 
+           className="border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12"/>
+     <button onClick={AddToDo} className="w-1/4 h-12 bg-blue-500 text-white rounded-r-lg font-text" > 
       {language == "Deutsch" ? (
         <span>
           Hinzufügen
@@ -154,17 +157,18 @@ function ToDoListe({value, setValue}) {
       )} 
      </button>
      </div> 
-    <ul className="list-none">
+    <ul className="list-none font-text flex flex-col items-left w-1/2 gap-y-5">
       {todos.map((todo, index) => (
-      <li key={index}>
-        {todo}{" "}
+      <li key={index} className="flex flex-row justify-between items-center h-10 text-lg bg-red-200 rounded-lg ">
+        <input type="checkbox" className="ml-7"/> 
+        <span className="mx-8"> {todo}{" "} </span>
         <button onClick={() => {
           const updatedTodos = todos.filter((_, i) => i != index);
           setToDos(updatedTodos);
           localStorage.setItem("todos", JSON.stringify(todos));
           
 
-        }}>Löschen</button>
+        }}><FontAwesomeIcon icon={faTrash} className="mr-5"  /></button>
      </li>
    ))}
 
