@@ -5,10 +5,14 @@
 @theme {
   --font-head: Poppins, sans-serif;
   --font-text: Inter, sans-serif; 
-  --color-mainColor: #9D8540 ;
+  --color-mainColor: #A3FFE4;
 }
- body {
-  /* display: flex;
-  justify-content: center; */
- } 
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #0f172a, #06b6d4);background: linear-gradient(to right, #020e52, #1E1B3A);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #FFFFFF;
+}
 

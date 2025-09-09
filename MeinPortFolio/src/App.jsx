@@ -16,7 +16,7 @@ export default function App() {
   const location = useLocation();
   const[language, setLanguage] = useState('Deutsch');
   const[isGerman, setIsGerman] = useState(true);
-
+  const color = "#A3FFE4";
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
     localStorage.setItem("isGerman", isGerman.toString())
@@ -51,21 +51,24 @@ export default function App() {
     </div> 
  
       {/*Handy */}
-     <div className="flex  items-center justify-center  w-full h-12 md:hidden  bg-black text-white">
-          Mein Portfolio
-      </div>  
-      <div className="w-full h-12 fixed bottom-0 flex items-center justify-between px-10 bg-black md:hidden">
+     <div className=" font-head text-white px-7 flex  items-center justify-between  w-full h-12 md:hidden ">
+      <div className="text-mainColor text-xl">
+        Mein Portfolio
+      </div>
+      
+      <div className="w-1/2 flex justify-between  text-md">
         <Link to='/'>
-         <button style={{color: location.pathname == '/' ? "orange": 'white'}}>
+         <button style={{color: location.pathname == '/' ? color: 'white'}}>
           Startseite 
          </button>
        </Link>
        <Link to='/ToDoListe'>
-         <button style={{color: location.pathname == '/ToDoListe' ? "orange": 'white'}}>
+         <button style={{color: location.pathname == '/ToDoListe' ? color: 'white'}}>
            To Do Liste
          </button>
          </Link>
       </div>
+      </div>  
 
       {/* Übersetzer */}
       <div onClick={pressIsGerman}>
@@ -91,7 +94,7 @@ export default function App() {
 
 function Startseite() {
   const refBox = useRef(null);
-  const clas = "w-1/2 h-30 bg-mainColor flex items-center justify-center";
+  const clas = "w-1/2 h-30 bg-mainColor flex items-center justify-center text-black";
   const infos = [1,2,3,4,5,6,7,8,9,10]
   const animationBox = () => {
     gsap.fromTo(refBox.current, {x:-200, opacity: 0, scale:0.5}, {x:0, opacity: 1, scale:1, ease:"power3.inOut", duration:2});
@@ -159,7 +162,7 @@ function ToDoListe({value, setValue}) {
      </div> 
     <ul className="list-none font-text flex flex-col items-left w-1/2 gap-y-5">
       {todos.map((todo, index) => (
-      <li key={index} className="flex flex-row justify-between items-center h-10 text-lg bg-red-200 rounded-lg ">
+      <li key={index} className="flex flex-row justify-between items-center h-10 text-lg bg-red-200 text-black rounded-lg  ">
         <input type="checkbox" className="ml-7"/> 
         <span className="mx-8"> {todo}{" "} </span>
         <button onClick={() => {
