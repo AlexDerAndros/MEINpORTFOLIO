@@ -16,7 +16,7 @@ export default function App() {
   const location = useLocation();
   const[language, setLanguage] = useState('Deutsch');
   const[isGerman, setIsGerman] = useState(true);
-  const color = "#A3FFE4";
+  const color = "#B6FFEA";
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
     localStorage.setItem("isGerman", isGerman.toString())
@@ -52,11 +52,11 @@ export default function App() {
  
       {/*Handy */}
      <div className=" font-head text-white px-7 flex  items-center justify-between  w-full h-12 md:hidden ">
-      <div className="text-mainColor text-xl">
+      <div className="text-xl font-h">
         Mein Portfolio
       </div>
       
-      <div className="w-1/2 flex justify-between  text-md">
+      <div className="w-1/2 flex justify-between  text-sm">
         <Link to='/'>
          <button style={{color: location.pathname == '/' ? color: 'white'}}>
           Startseite 
@@ -71,7 +71,7 @@ export default function App() {
       </div>  
 
       {/* Übersetzer */}
-      <div onClick={pressIsGerman}>
+      <div onClick={pressIsGerman} className="font-text">
        {language == "Deutsch" ? (
         <span>
           Sprache:
@@ -93,25 +93,46 @@ export default function App() {
 }
 
 function Startseite() {
-  const refBox = useRef(null);
-  const clas = "w-1/2 h-30 bg-mainColor flex items-center justify-center text-black";
-  const infos = [1,2,3,4,5,6,7,8,9,10]
-  const animationBox = () => {
-    gsap.fromTo(refBox.current, {x:-200, opacity: 0, scale:0.5}, {x:0, opacity: 1, scale:1, ease:"power3.inOut", duration:2});
+  
+  const Card = ({project, des}) => {
+    return (
+      <div className="w-50 h-45 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
+         <span className="text-2xl font-bold">
+           {project}
+         </span>
+         <span className="text-gray-400">
+           {des}
+         </span>
+         <span className="w-full h-5 rounded-lg bg-Cred text-cardBg flex items-center justify-center p-4">
+            Details ansehen
+         </span>
+      </div>
+    );
   }
   useEffect(() => {
-    animationBox();
   }, []);
    return (
-    <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 place-items-center mt-10 mb-20" ref={refBox}>
-       {infos.map((info, index) => (
-        <div className={clas} key={index}>
-          Box {info}
-        </div>
-       ))}
+    <div className="flex flex-col items-left justify-center w-full mt-15 font-text px-5 ">
+       <span className="text-5xl font-bold text-mainColor">
+          Hallo, ich bin Alex
+       </span>
+       <span className=" text-4xl font-text ">
+          Webentwickler mit Fokus auf moderne Frontend- und Backend Technologien
+       </span>
+       <span className="text-3xl mt-20 mb-5 font-bold">
+        Projekte
+       </span>
+       <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-5">
+         <Card project="SV Website" des="b" />
+         <Card project="Test 1" des="6hje" />
+         <Card project="Kunstseite" des="b" />
+       </div>
+       
+
     </div>
    );
 }
+
 
 
 function ToDoListe({value, setValue}) {
