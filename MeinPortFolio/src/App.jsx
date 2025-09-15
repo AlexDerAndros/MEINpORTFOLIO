@@ -11,6 +11,14 @@ const LanguageContext = createContext();
 
 /*Code */
 
+const Button = ({value,click, customStyle}) => {
+  const base = "rounded-lg bg-Cred text-cardBg flex items-center justify-center p-4";
+  return (
+    <div className={`${base} ${customStyle}`} onClick={click}>
+      {value}
+    </div>
+  );
+}
 export default function App() {
   const[value, setValue] = useState('');
   const location = useLocation();
@@ -93,7 +101,8 @@ export default function App() {
 }
 
 function Startseite() {
-  
+  const nothing = () => {
+  };
   const Card = ({project, des}) => {
     return (
       <div className="w-50 h-45 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
@@ -103,9 +112,7 @@ function Startseite() {
          <span className="text-gray-400">
            {des}
          </span>
-         <span className="w-full h-5 rounded-lg bg-Cred text-cardBg flex items-center justify-center p-4">
-            Details ansehen
-         </span>
+        <Button value={"Details ansehen"} click={nothing} customStyle={"h-8 w-full"}/>
       </div>
     );
   }
@@ -122,7 +129,7 @@ function Startseite() {
        <span className="text-3xl mt-20 mb-5 font-bold">
         Projekte
        </span>
-       <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-5">
+       <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-5 md:gap-30">
          <Card project="SV Website" des="b" />
          <Card project="Test 1" des="6hje" />
          <Card project="Kunstseite" des="b" />
@@ -164,22 +171,12 @@ function ToDoListe({value, setValue}) {
        </span>
       )} 
     </div>
-     <div>
-     <input type="text" 
+     <div className="flex w-3/4 flex-row">
+       <input type="text" 
            onChange={(e) => setValue(e.target.value)} 
            placeholder="Add new task" 
            className="border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12 placeholder: text-mainColor"/>
-     <button onClick={AddToDo} className="w-1/4 h-12 bg-blue-500 text-white rounded-r-lg font-text" > 
-      {language == "Deutsch" ? (
-        <span>
-          Hinzufügen
-        </span>
-      ):(
-       <span>
-         Add
-       </span>
-      )} 
-     </button>
+       <Button value={language == "Deutsch" ? "Hinzufügen" : "Add"} customStyle={"h-12 w-1/5 rounded-l-none"} click={AddToDo}/>
      </div> 
     <ul className="list-none font-text flex flex-col items-left w-1/2 gap-y-5">
       {todos.map((todo, index) => (
