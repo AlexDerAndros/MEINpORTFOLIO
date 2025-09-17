@@ -18,7 +18,8 @@ const Button = ({value,click, customStyle}) => {
       {value}
     </div>
   );
-}
+};
+
 export default function App() {
   const[value, setValue] = useState('');
   const location = useLocation();
@@ -101,11 +102,19 @@ export default function App() {
 }
 
 function Startseite() {
+  const tl = gsap.timeline({ repeat: 0 });
+
+  const card = useRef(null);
+  const card1 = useRef(null);
+  const card2 = useRef(null);
+  const card3 = useRef(null);
+
+
   const nothing = () => {
   };
-  const Card = ({project, des}) => {
+  const Card = ({project, des, ca}) => {
     return (
-      <div className="w-50 h-45 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
+      <div ref={ca} className="w-50 md:w-90 h-45 md:h-55 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
          <span className="text-2xl font-bold">
            {project}
          </span>
@@ -115,11 +124,20 @@ function Startseite() {
         <Button value={"Details ansehen"} click={nothing} customStyle={"h-8 w-full"}/>
       </div>
     );
-  }
+  };
+  const animationCard = () => {
+     tl.fromTo(card.current, {x:-550}, {x:0, duration: 1});
+     tl.fromTo(card1.current, {x:550}, {x:0, duration: 2});
+     tl.fromTo(card2.current, {x:-550}, {x:0, duration: 1}, ">-3");
+     tl.fromTo(card3.current, {x:550}, {x:0, duration: 2}, ">0");
+  
+    };
   useEffect(() => {
-  }, []);
+    animationCard();
+  }, [tl]);
+  
    return (
-    <div className="flex flex-col items-left justify-center w-full mt-15 font-text px-5 ">
+    <div className="flex flex-col items-left justify-center w-full mt-15 font-text px-5 overflow-x-hidden ">
        <span className="text-5xl font-bold text-mainColor">
           Hallo, ich bin Alex
        </span>
@@ -129,10 +147,12 @@ function Startseite() {
        <span className="text-3xl mt-20 mb-5 font-bold">
         Projekte
        </span>
-       <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-5 md:gap-30">
-         <Card project="SV Website" des="b" />
-         <Card project="Test 1" des="6hje" />
-         <Card project="Kunstseite" des="b" />
+       <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 
+       md:grid-cols-[repeat(auto-fill,minmax(500px,1fr))]  gap-5 md:gap-20 place-items-center">
+         <Card project="SV Website" des="b" ca={card}/>
+         <Card project="Kunstwebsite" des="6hje" ca={card1} />
+         <Card project="Test 1" des="6hje" ca={card2} />
+         <Card project="Test 2" des="6hje" ca={card3} />
        </div>
        
 
