@@ -4,7 +4,7 @@ import "./App.css";
 import { Link, Route, Routes, useLocation} from "react-router-dom";
 import {gsap} from 'gsap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 /*Contexts */
 const LanguageContext = createContext();
@@ -25,19 +25,39 @@ export default function App() {
   const location = useLocation();
   const[language, setLanguage] = useState('Deutsch');
   const[isGerman, setIsGerman] = useState(true);
+  const[light, setLight] = useState(false);
   const color = "#B6FFEA";
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
     localStorage.setItem("isGerman", isGerman.toString())
-  }
-  
-  useEffect(() => {
-    if(localStorage.getItem('isGerman') === "true") {
+  };
+
+  const pressLight = () => {
+    setLight(!light);
+    localStorage.setItem("light", light.toString());
+  };
+
+  const checkLanguage = () => {
+     if(localStorage.getItem('isGerman') === "true") {
       setLanguage('Deutsch')
     }
     else {
       setLanguage('English');
     }
+  };
+
+  const checkLight = () => {
+    if(localStorage.getItem("light") == "true") {
+      setLight(true);
+    }
+    else {
+      setLight(false);
+    }
+  };
+  
+  useEffect(() => {
+    checkLanguage();
+    checkLight();
   },[isGerman]);
 
   return (
@@ -91,6 +111,12 @@ export default function App() {
        </span>
       )}&nbsp; {language}
      </div> 
+
+     {/*Light/Dark Mode */}
+     <div className="text-white" onClick={pressLight}>
+       {light == true ? ( <FontAwesomeIcon icon={faMoon} />) : (<FontAwesomeIcon icon={faSun}/>)}
+       {light.toString()}
+     </div>
     <LanguageContext.Provider value={{language }}> 
      <Routes>
        <Route path="/" element={<Startseite/>}/>
@@ -108,7 +134,9 @@ function Startseite() {
   const card1 = useRef(null);
   const card2 = useRef(null);
   const card3 = useRef(null);
-
+  const infoText = useRef(null);
+  const presentingText = useRef(null);
+  const projectText = useRef(null);
 
   const nothing = () => {
   };
@@ -126,29 +154,36 @@ function Startseite() {
     );
   };
   const animationCard = () => {
-     tl.fromTo(card.current, {x:-550}, {x:0, duration: 1});
-     tl.fromTo(card1.current, {x:550}, {x:0, duration: 2});
-     tl.fromTo(card2.current, {x:-550}, {x:0, duration: 1}, ">-3");
-     tl.fromTo(card3.current, {x:550}, {x:0, duration: 2}, ">0");
+     tl.fromTo(card.current, {x:-150, opacity: 0, scale: 0.7}, {x:0, opacity: 1, scale: 1, duration: 1, ease: "power3.inOut"});
+     tl.fromTo(card1.current, {x:150, opacity:0, scale: 0.7}, {x:0, opacity:1, scale: 1, duration: 2, ease: "power3.inOut"});
+     tl.fromTo(card2.current, {x:-150, opacity: 0, scale: 0.7}, {x:0, opacity: 1, scale: 1, duration: 1, ease: "power3.inOut"}, ">-3");
+     tl.fromTo(card3.current, {x:150, opacity: 0, scale: 0.7}, {x:0, opacity: 1, scale: 1, duration: 2, ease: "power3.inOut"}, ">0");
+  };
+  const animationInfoText = () => {
+    tl.fromTo(presentingText.current, {x:-250, opacity: 0, scale: 0.8}, {x:0, opacity: 1, scale: 1, duration: 2, ease:"power3.inOut"});
+    tl.fromTo(infoText.current, {x:-250, opacity: 0, scale: 0.8}, {x:0, opacity: 1, scale: 1, duration: 2, ease: "power3.inOut"});
+    tl.fromTo(projectText.current, {x:-250, opacity: 0, scale: 0.6}, {x:0, opacity: 1, scale: 1, duration: 3, ease: "power3.inOut"});
+    
+  };
   
-    };
   useEffect(() => {
-    animationCard();
+    // animationInfoText();
+    // animationCard();
   }, [tl]);
   
    return (
     <div className="flex flex-col items-left justify-center w-full mt-15 font-text px-5 overflow-x-hidden ">
-       <span className="text-5xl font-bold text-mainColor">
+       <span className="text-5xl font-bold text-mainColor" ref={presentingText}>
           Hallo, ich bin Alex
        </span>
-       <span className=" text-4xl font-text ">
+       <span className=" text-4xl font-text " ref={infoText}>
           Webentwickler mit Fokus auf moderne Frontend- und Backend Technologien
        </span>
-       <span className="text-3xl mt-20 mb-5 font-bold">
+       <span className="text-3xl mt-20 mb-5 font-bold" ref={projectText}>
         Projekte
        </span>
        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 
-       md:grid-cols-[repeat(auto-fill,minmax(500px,1fr))]  gap-5 md:gap-20 place-items-center">
+       md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]  gap-5 md:gap-20 place-items-center">
          <Card project="SV Website" des="b" ca={card}/>
          <Card project="Kunstwebsite" des="6hje" ca={card1} />
          <Card project="Test 1" des="6hje" ca={card2} />
