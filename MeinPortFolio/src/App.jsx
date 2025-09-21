@@ -8,6 +8,7 @@ import { faTrash, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 /*Contexts */
 const LanguageContext = createContext();
+const LDThemeContext = createContext();
 
 /*Code */
 
@@ -26,6 +27,8 @@ export default function App() {
   const[language, setLanguage] = useState('Deutsch');
   const[isGerman, setIsGerman] = useState(true);
   const[light, setLight] = useState(false);
+  const[theme, setTheme] = useState('dark');
+  const[styleSite, setStyleSite] = useState('linear-gradient(to right, #020e52, #1E1B3A)');
   const color = "#B6FFEA";
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
@@ -48,20 +51,24 @@ export default function App() {
 
   const checkLight = () => {
     if(localStorage.getItem("light") == "true") {
-      setLight(true);
+      setTheme("light");
+      document.documentElement.style.setProperty("--bg-site", "orange" );
+
     }
     else {
-      setLight(false);
+      setTheme("dark");
+      document.documentElement.style.setProperty("--bg-site", "linear-gradient(to right, #020e52, #1E1B3A)" );
     }
+    
   };
   
   useEffect(() => {
     checkLanguage();
     checkLight();
-  },[isGerman]);
+  },[isGerman, light]);
 
   return (
-    <>
+    <div>
     {/* Tablet */}
      <div className=" hidden md:flex flex-row items-center justify-between  w-full h-12 px-10 bg-black  ">
        <div className="text-white w-1/3 flex justify-center text-lg">
@@ -113,23 +120,25 @@ export default function App() {
      </div> 
 
      {/*Light/Dark Mode */}
-     <div className="text-white" onClick={pressLight}>
-       {light == true ? ( <FontAwesomeIcon icon={faMoon} />) : (<FontAwesomeIcon icon={faSun}/>)}
-       {light.toString()}
-     </div>
-    <LanguageContext.Provider value={{language }}> 
-     <Routes>
+     <div className="text-white cursor-pointer" onClick={pressLight}>
+       {theme == "dark" ? ( <FontAwesomeIcon icon={faMoon} />) : (<FontAwesomeIcon icon={faSun}/>)}
+       {theme}
+    </div>
+     <LDThemeContext.Provider value={{theme}}>
+     <LanguageContext.Provider value={{language}}> 
+      <Routes>
        <Route path="/" element={<Startseite/>}/>
        <Route path="/ToDoListe" element={<ToDoListe value={value} setValue={setValue}/>}/>
-      </Routes>
-     </LanguageContext.Provider>  
-    </>
+       </Routes>
+      </LanguageContext.Provider>
+     </LDThemeContext.Provider>   
+    </div>
   );
 }
 
 function Startseite() {
   const tl = gsap.timeline({ repeat: 0 });
-
+  const {theme, } = useContext(LDThemeContext);
   const card = useRef(null);
   const card1 = useRef(null);
   const card2 = useRef(null);
@@ -137,7 +146,7 @@ function Startseite() {
   const infoText = useRef(null);
   const presentingText = useRef(null);
   const projectText = useRef(null);
-
+  const [colorI, setColorI] = useState('white');
   const nothing = () => {
   };
   const Card = ({project, des, ca}) => {
@@ -169,6 +178,7 @@ function Startseite() {
   useEffect(() => {
     // animationInfoText();
     // animationCard();
+    setColorI(theme == "dark" ? "white" : "black");
   }, [tl]);
   
    return (
@@ -176,7 +186,7 @@ function Startseite() {
        <span className="text-5xl font-bold text-mainColor" ref={presentingText}>
           Hallo, ich bin Alex
        </span>
-       <span className=" text-4xl font-text " ref={infoText}>
+       <span className={` text-4xl font-text text-${colorI}`} ref={infoText}>
           Webentwickler mit Fokus auf moderne Frontend- und Backend Technologien
        </span>
        <span className="text-3xl mt-20 mb-5 font-bold" ref={projectText}>
@@ -199,6 +209,7 @@ function Startseite() {
 
 function ToDoListe({value, setValue}) {
   const {language} = useContext(LanguageContext);
+  const theme = useContext(LDThemeContext);
   const toDoRef = useRef(null);
   const[todos, setToDos] = useState([]);
   const AddToDo = () => {
