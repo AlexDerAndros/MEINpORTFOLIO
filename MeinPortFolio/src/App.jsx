@@ -28,16 +28,19 @@ export default function App() {
   const[isGerman, setIsGerman] = useState(true);
   const[light, setLight] = useState(false);
   const[theme, setTheme] = useState('dark');
-  const[styleSite, setStyleSite] = useState('linear-gradient(to right, #020e52, #1E1B3A)');
-  const color = "#B6FFEA";
+  const[colorTheme, setColorTheme] = useState("white");
+  const[customColorThemeM, setCustomColorThemeM] = useState('LightMainColor');
+  const[color, setColor] = useState("#B6FFEA");
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
-    localStorage.setItem("isGerman", isGerman.toString())
+    localStorage.setItem("isGerman", isGerman.toString());
+    checkLanguage();
   };
 
   const pressLight = () => {
     setLight(!light);
     localStorage.setItem("light", light.toString());
+    checkLight();
   };
 
   const checkLanguage = () => {
@@ -52,12 +55,18 @@ export default function App() {
   const checkLight = () => {
     if(localStorage.getItem("light") == "true") {
       setTheme("light");
-      document.documentElement.style.setProperty("--bg-site", "orange" );
-
+      document.documentElement.style.setProperty("--bg-site", "white" );
+      setColorTheme("black");
+      setCustomColorThemeM("LightMainColor");
+      setColor("#FFE066");
     }
     else {
       setTheme("dark");
       document.documentElement.style.setProperty("--bg-site", "linear-gradient(to right, #020e52, #1E1B3A)" );
+      setColorTheme("white");
+      setCustomColorThemeM('mainColor');
+      setColor("#B6FFEA");
+          
     }
     
   };
@@ -87,19 +96,19 @@ export default function App() {
     </div> 
  
       {/*Handy */}
-     <div className=" font-head text-white px-7 flex  items-center justify-between  w-full h-12 md:hidden ">
-      <div className="text-xl font-h">
+     <div className=" font-head  px-7 flex  items-center justify-between  w-full h-12 md:hidden ">
+      <div className={`text-xl font-h text-${colorTheme}`}>
         Mein Portfolio
       </div>
       
-      <div className="w-1/2 flex justify-between  text-sm">
+      <div className="w-1/2 flex justify-between  text-sm ">
         <Link to='/'>
-         <button style={{color: location.pathname == '/' ? color: 'white'}}>
+         <button style={{color: location.pathname == '/' ? color: colorTheme}}>
           Startseite 
          </button>
        </Link>
        <Link to='/ToDoListe'>
-         <button style={{color: location.pathname == '/ToDoListe' ? color: 'white'}}>
+         <button style={{color: location.pathname == '/ToDoListe' ? color: colorTheme}}>
            To Do Liste
          </button>
          </Link>
@@ -107,7 +116,7 @@ export default function App() {
       </div>  
 
       {/* Übersetzer */}
-      <div onClick={pressIsGerman} className="font-text">
+      <div onClick={pressIsGerman} className={`font-text text-${colorTheme}`}>
        {language == "Deutsch" ? (
         <span>
           Sprache:
@@ -120,25 +129,26 @@ export default function App() {
      </div> 
 
      {/*Light/Dark Mode */}
-     <div className="text-white cursor-pointer" onClick={pressLight}>
+     <div className={`text-${colorTheme} cursor-pointer`} onClick={pressLight}>
        {theme == "dark" ? ( <FontAwesomeIcon icon={faMoon} />) : (<FontAwesomeIcon icon={faSun}/>)}
        {theme}
     </div>
-     <LDThemeContext.Provider value={{theme}}>
+
+     <LDThemeContext.Provider value={{customColorThemeM, colorTheme}}> 
      <LanguageContext.Provider value={{language}}> 
       <Routes>
        <Route path="/" element={<Startseite/>}/>
        <Route path="/ToDoListe" element={<ToDoListe value={value} setValue={setValue}/>}/>
        </Routes>
       </LanguageContext.Provider>
-     </LDThemeContext.Provider>   
+      </LDThemeContext.Provider>    
     </div>
   );
 }
 
 function Startseite() {
   const tl = gsap.timeline({ repeat: 0 });
-  const {theme, } = useContext(LDThemeContext);
+  const {colorTheme, customColorThemeM} = useContext(LDThemeContext);
   const card = useRef(null);
   const card1 = useRef(null);
   const card2 = useRef(null);
@@ -146,7 +156,6 @@ function Startseite() {
   const infoText = useRef(null);
   const presentingText = useRef(null);
   const projectText = useRef(null);
-  const [colorI, setColorI] = useState('white');
   const nothing = () => {
   };
   const Card = ({project, des, ca}) => {
@@ -176,20 +185,19 @@ function Startseite() {
   };
   
   useEffect(() => {
-    // animationInfoText();
-    // animationCard();
-    setColorI(theme == "dark" ? "white" : "black");
+    animationInfoText();
+    animationCard();
   }, [tl]);
   
    return (
     <div className="flex flex-col items-left justify-center w-full mt-15 font-text px-5 overflow-x-hidden ">
-       <span className="text-5xl font-bold text-mainColor" ref={presentingText}>
+       <span className={`text-5xl font-bold text-${customColorThemeM}`} ref={presentingText}>
           Hallo, ich bin Alex
        </span>
-       <span className={` text-4xl font-text text-${colorI}`} ref={infoText}>
+       <span className={` text-4xl font-text text-${colorTheme}`} ref={infoText}>
           Webentwickler mit Fokus auf moderne Frontend- und Backend Technologien
        </span>
-       <span className="text-3xl mt-20 mb-5 font-bold" ref={projectText}>
+       <span className={`text-3xl mt-20 mb-5 font-bold text-${colorTheme}`} ref={projectText}>
         Projekte
        </span>
        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 
@@ -209,13 +217,13 @@ function Startseite() {
 
 function ToDoListe({value, setValue}) {
   const {language} = useContext(LanguageContext);
-  const theme = useContext(LDThemeContext);
+  const {customColorThemeM} = useContext(LDThemeContext);
   const toDoRef = useRef(null);
   const[todos, setToDos] = useState([]);
   const AddToDo = () => {
     if(value.trim() != '') {
-      setToDos([...todos, value]);
-      localStorage.setItem("todos", JSON.stringify(todos));
+      // setToDos([...todos, value]);
+      // localStorage.setItem("todos", JSON.stringify(todos));
 
     }
   };
@@ -241,25 +249,23 @@ function ToDoListe({value, setValue}) {
        <input type="text" 
            onChange={(e) => setValue(e.target.value)} 
            placeholder="Add new task" 
-           className="border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12 placeholder: text-mainColor"/>
+           className={`border-1 border-gray-300 p-1.5 text-lg font-text rounded-l-lg w-3/4 h-12 placeholder: text-gray-400`}/>
        <Button value={language == "Deutsch" ? "Hinzufügen" : "Add"} customStyle={"h-12 w-1/5 rounded-l-none"} click={AddToDo}/>
      </div> 
     <ul className="list-none font-text flex flex-col items-left w-1/2 gap-y-5">
-      {todos.map((todo, index) => (
+    
+      {/* {todos.map((todo, index) => (
       <li key={index} className="flex flex-row justify-between items-center h-10 text-lg bg-red-200 text-black rounded-lg  ">
         <input type="checkbox" className="ml-7"/> 
         <span className="mx-8"> {todo}{" "} </span>
         <button onClick={() => {
-          const updatedTodos = todos.filter((_, i) => i != index);
-          setToDos(updatedTodos);
-          localStorage.setItem("todos", JSON.stringify(todos));
+          
           
 
-        }}><FontAwesomeIcon icon={faTrash} className="mr-5"  /></button>
+        }}><FontAwesomeIcon icon={faTrash} className="mr-5"  /></button> 
      </li>
-   ))}
-
-    </ul>
+   ))} */}
+    </ul> 
    </div> 
   );
 }
