@@ -4,7 +4,7 @@ import "./App.css";
 import { Link, Route, Routes, useLocation} from "react-router-dom";
 import {gsap} from 'gsap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import {  faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 /*Contexts */
 const LanguageContext = createContext();
@@ -13,7 +13,7 @@ const LDThemeContext = createContext();
 /*Code */
 
 const Button = ({value,click, customStyle}) => {
-  const base = "rounded-lg bg-Cred text-cardBg flex items-center justify-center p-4";
+  const base = "rounded-lg bg-Cred text-cardBg flex items-center justify-center p-4 cursor-pointer";
   return (
     <div className={`${base} ${customStyle}`} onClick={click}>
       {value}
@@ -31,6 +31,18 @@ export default function App() {
   const[colorTheme, setColorTheme] = useState("white");
   const[customColorThemeM, setCustomColorThemeM] = useState('LightMainColor');
   const[color, setColor] = useState("#B6FFEA");
+  const card = useRef(null);
+  const card1 = useRef(null);
+  const card2 = useRef(null);
+  const card3 = useRef(null);
+  
+  const projects = [
+    {theme: "SV Website", shortDescription: "Short Description", longDescription: "LongDescription", cardRef: card, link: "/SVWebsite"} ,
+    {theme: "Kunstwebsite", shortDescription: "Short Description", longDescription: "LongDescription",cardRef: card1, link: "/Kunstwebsite"} ,
+    {theme: "Test 1", shortDescription: "Short Description", longDescription: "LongDescription", cardRef: card2 , link: "/Test1"},
+    {theme: "Test 7", shortDescription: "Short Description", longDescription: "LongDescription", cardRef: card3, link: "/Test2"},
+
+  ];
   const pressIsGerman = () => {
     setIsGerman(!isGerman);
     localStorage.setItem("isGerman", isGerman.toString());
@@ -84,7 +96,7 @@ export default function App() {
          Mein Portfolio
        </div>
        <Link to='/'>
-        <button style={{color: location.pathname == '/' ? "orange": 'white'}}>
+        <button style={{color: location.pathname == '/' || location.pathname == '/SVWebsite' || location.pathname == '/Kunstwebsite' || location.pathname == '/Test1' || location.pathname == '/Test2' ? "orange": 'white'}}>
           Startseite 
         </button>
        </Link>
@@ -103,7 +115,7 @@ export default function App() {
       
       <div className="w-1/2 flex justify-between  text-sm ">
         <Link to='/'>
-         <button style={{color: location.pathname == '/' ? color: colorTheme}}>
+         <button style={{color: location.pathname == '/' || location.pathname == '/SVWebsite' || location.pathname == '/Kunstwebsite' || location.pathname == '/Test1' || location.pathname == '/Test2' ? color: colorTheme}}>
           Startseite 
          </button>
        </Link>
@@ -137,8 +149,15 @@ export default function App() {
      <LDThemeContext.Provider value={{customColorThemeM, colorTheme}}> 
      <LanguageContext.Provider value={{language}}> 
       <Routes>
-       <Route path="/" element={<Startseite/>}/>
-       <Route path="/ToDoListe" element={<ToDoListe value={value} setValue={setValue}/>}/>
+        <Route path="/" element={<Startseite projects={projects} card={card} card1 ={card1} card2={card2} card3= {card3}/>} />
+        <Route path="/ToDoListe" element={<ToDoListe value={value} setValue={setValue} />} />
+        {projects.map((project, index) => (
+             <Route
+               key={index}
+               path={project.link}
+               element={<CardD project={project.theme} des={project.longDescription} />}
+              />
+        ))}
        </Routes>
       </LanguageContext.Provider>
       </LDThemeContext.Provider>    
@@ -146,31 +165,27 @@ export default function App() {
   );
 }
 
-function Startseite() {
+function Startseite({projects, card, card1, card2, card3}) {
   const tl = gsap.timeline({ repeat: 0 });
   const {colorTheme, customColorThemeM} = useContext(LDThemeContext);
-  const card = useRef(null);
-  const card1 = useRef(null);
-  const card2 = useRef(null);
-  const card3 = useRef(null);
+ 
   const infoText = useRef(null);
   const presentingText = useRef(null);
   const projectText = useRef(null);
-  const nothing = () => {
-  };
-  const Card = ({project, des, ca}) => {
-    return (
-      <div ref={ca} className="w-50 md:w-90 h-45 md:h-55 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
-         <span className="text-2xl font-bold">
-           {project}
-         </span>
-         <span className="text-gray-400">
-           {des}
-         </span>
-        <Button value={"Details ansehen"} click={nothing} customStyle={"h-8 w-full"}/>
-      </div>
-    );
-  };
+  
+
+  
+ 
+ const Card = ({ project, des, ca, link }) => (
+  <div ref={ca} className="w-50 md:w-90 h-45 md:h-55 rounded-lg bg bg-cardBg p-6 font-text flex flex-col items-left justify-between">
+    <span className="text-2xl font-bold">{project}</span>
+    <span className="text-gray-400">{des}</span>
+    <Link to={link}>
+      <Button value={"Details ansehen"} click={() => {}} customStyle={"h-8 w-full"} />
+    </Link>
+  </div>
+);
+  
   const animationCard = () => {
      tl.fromTo(card.current, {x:-150, opacity: 0, scale: 0.7}, {x:0, opacity: 1, scale: 1, duration: 1, ease: "power3.inOut"});
      tl.fromTo(card1.current, {x:150, opacity:0, scale: 0.7}, {x:0, opacity:1, scale: 1, duration: 2, ease: "power3.inOut"});
@@ -202,24 +217,41 @@ function Startseite() {
        </span>
        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 
        md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]  gap-5 md:gap-20 place-items-center">
-         <Card project="SV Website" des="b" ca={card}/>
-         <Card project="Kunstwebsite" des="6hje" ca={card1} />
-         <Card project="Test 1" des="6hje" ca={card2} />
-         <Card project="Test 2" des="6hje" ca={card3} />
+         {projects.map((project, index) => (
+          <div key={index}>
+             <Card project={project.theme} des={project.shortDescription} ca={project.cardRef} link={project.link} ldes={project.longDescription} idx={index} />
+          </div>
+         ))}
+        
        </div>
        
-
+      
     </div>
    );
 }
 
+const CardD = ({des, project, idx}) => {
+     const nothing = () => {
+  };
+     return (
+       <div className="w-full flex flex-col justify-center items-left" key={idx}>
+         <span className="text-2xl font-bold">
+           {project}
+         </span>
+         <span className="text-gray-400">
+           {des}
+         </span>
+         <Link to="/">
+          <Button value={"Zurück"} click={nothing} customStyle={"h-8 w-full"}/>
+        </Link>
+      </div>
+     );
+  };
 
 
 function ToDoListe({value, setValue}) {
   const {language} = useContext(LanguageContext);
-  const {customColorThemeM} = useContext(LDThemeContext);
   const toDoRef = useRef(null);
-  const[todos, setToDos] = useState([]);
   const AddToDo = () => {
     if(value.trim() != '') {
       // setToDos([...todos, value]);
@@ -228,8 +260,7 @@ function ToDoListe({value, setValue}) {
     }
   };
   useEffect(()=> {
-   const savedTodos = JSON.parse(localStorage.getItem("todos"));
-   setToDos(savedTodos);
+  
    gsap.fromTo(toDoRef.current, {x: -200, opacity:0, scale:0.8}, {x:0, opacity:1, scale: 1, duration:1.5, ease:"power3.inOut"});
   },[])
   return (
